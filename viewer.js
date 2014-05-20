@@ -1,6 +1,6 @@
 function formatStream( name ) {
 
-	return '<object type="application/x-shockwave-flash" id="live_embed_player_flash", class="stream" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=${name}" bgcolor="#000000"><param name="allowScriptAccess" value="sameDomain" /><param name="allowNetworking" value="all" /><param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" /><param name="flashvars" value="hostname=www.twitch.tv&channel='+ name +'&auto_play=true" /></object>'
+	return '<object type="application/x-shockwave-flash" id="live_embed_player_flash", class="stream" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=${name}" bgcolor="#000000"><param name="allowScriptAccess" value="sameDomain" /><param name="allowNetworking" value="all" /><param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" /><param name="flashvars" value="hostname=www.twitch.tv&channel='+ name +'&auto_play=true&start_volume=0" /></object>'
 }
 
 
