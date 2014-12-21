@@ -1,7 +1,7 @@
 srlRaceWatcher
 ==============
 
-A webpage to view streams from an SRL race in a compact format
+A webpage to view streams from an SRL race in a compact format, suitable for restreaming your opponents while you're in a race. (the race viewing page built into SRL takes up too much space)
 
 Set the url param "race" to the id of the SRL race
 
