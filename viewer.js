@@ -20,11 +20,19 @@ function getParam(name){
 
 function parseSrlJson(response) {
     var me = getParam("me");
+    var blocked = getParam("blocked");
+    var blockedUsers = [];
+    if(blocked) {
+        blockedUsers = blocked.split(',');
+    }
+    blockedUsers.push(me);
+
     var names = [];
     var entrants = response.entrants;
     for(var entrant in entrants) {
         var twitch = entrants[entrant].twitch;
-        if(twitch && twitch !== me) {
+        var userIsBlocked = twitch && ($.inArray(twitch, blockedUsers) > -1);
+        if( twitch && !userIsBlocked ) {
             names.push(twitch);
         }
     }
@@ -50,5 +58,40 @@ function loadStreams() {
     
 }
 
+function createHtmlTable() {
+    var width = getParam("w");
+    if(!width) {
+        width = 2;
+    }
+    var height = getParam("h");
+    if(!height) {
+        height = 3;
+    }
 
-$( document ).ready( loadStreams )
+    var table = document.createElement("table");
+
+    for(var i = 0; i < height; ++i) {
+        var nameRow = table.insertRow(i*2);
+        var streamRow = table.insertRow(i*2 + 1)
+        for(var j = 0; j < width; ++j) {
+            var streamIndex = i * width + j;
+            //todo lol make this not so stupid
+            var nameCell = nameRow.insertCell(j);
+            nameCell.innerHTML = '<div id="name' + streamIndex + '" style="font-size:44"></div>';
+
+            var streamCell = streamRow.insertCell(j);
+            streamCell.innerHTML = '<div id="stream' + streamIndex + 'container" class="container"><div id="stream' + streamIndex + '" class="stream"></div></div>'
+        }
+
+    }
+
+    document.body.appendChild(table);
+}
+
+function init() {
+    createHtmlTable();
+    loadStreams();
+}
+
+
+$( document ).ready( init )
