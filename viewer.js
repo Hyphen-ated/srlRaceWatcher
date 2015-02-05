@@ -1,64 +1,13 @@
-function formatStream( name ) {
-
-	return '<object type="application/x-shockwave-flash" id="live_embed_player_flash", class="stream" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=${name}" bgcolor="#000000"><param name="allowScriptAccess" value="sameDomain" /><param name="allowNetworking" value="all" /><param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" /><param name="flashvars" value="hostname=www.twitch.tv&channel='+ name +'&auto_play=true&start_volume=0" /></object>'
+function init() {
+    createHtmlTable();
+    loadStreams();
 }
-
-
-function setStreams( names ) {
-    for(var i = 0; i < names.length; ++i) {
-        var name=names[i];
-        $( '#name' + i).html(name);
-        $( '#stream' + i ).html(formatStream( name ) );
-    }
-}
-
-
-function getParam(name){
-   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-      return decodeURIComponent(name[1]);
-}
-
-function parseSrlJson(response) {
-    var me = getParam("me");
-    var blocked = getParam("blocked");
-    var blockedUsers = [];
-    if(blocked) {
-        blockedUsers = blocked.split(',');
-    }
-    blockedUsers.push(me);
-
-    var names = [];
-    var entrants = response.entrants;
-    for(var entrant in entrants) {
-        var twitch = entrants[entrant].twitch;
-        var userIsBlocked = twitch && ($.inArray(twitch, blockedUsers) > -1);
-        if( twitch && !userIsBlocked ) {
-            names.push(twitch);
-        }
-    }
-    
-    setStreams(names);
-}
-
-
-function loadStreams() {
-    var race = getParam("race");
-    var apiUrl = "http://api.speedrunslive.com";
-    if(race) {
-        $.ajax({
-            type : "GET",
-            url : apiUrl + "/races/" + race,
-            processData : true,
-            data : {},
-            dataType : "jsonp",
-            jsonpCallback : "parseSrlJson",
-            cache : true
-        });
-    }
-    
-}
+$( document ).ready( init )
 
 function createHtmlTable() {
+    //make a table and put it on the page. 
+    //put divs in the grid with numbers in their names, 
+    //so we can stick twitch embeds and usernames in them
     var width = getParam("w");
     if(!width) {
         width = 2;
@@ -88,10 +37,73 @@ function createHtmlTable() {
     document.body.appendChild(table);
 }
 
-function init() {
-    createHtmlTable();
-    loadStreams();
+function loadStreams() {
+    //get info about the race from srl
+    var race = getParam("race");
+    var apiUrl = "http://api.speedrunslive.com";
+    if(race) {
+        $.ajax({
+            type : "GET",
+            url : apiUrl + "/races/" + race,
+            processData : true,
+            data : {},
+            dataType : "jsonp",
+            jsonpCallback : "parseSrlJson",
+            cache : true
+        });
+    }
+    
+}
+
+function parseSrlJson(response) {
+    //figure out which users in the race we should display
+    var me = getParam("me");
+    var blocked = getParam("blocked");
+    var blockedUsers = [];
+    if(blocked) {
+        blockedUsers = blocked.split(',');
+    }
+    blockedUsers.push(me);
+
+    var names = [];
+    var entrants = response.entrants;
+    for(var entrant in entrants) {
+        var twitch = entrants[entrant].twitch;
+        var userIsBlocked = twitch && ($.inArray(twitch, blockedUsers) > -1);
+        if( twitch && !userIsBlocked ) {
+            names.push(twitch);
+        }
+    }
+    
+    setStreams(names);
+}
+
+function setStreams( names ) {
+    //put all the names and twitch embeds in the page
+    for(var i = 0; i < names.length; ++i) {
+        var name=names[i];
+        $( '#name' + i).html(name);
+        $( '#stream' + i ).html(formatStream( name ) );
+    }
+}
+
+function formatStream( name ) {
+    //put in a twitch embed to show the stream that has the given name
+    //todo: this hardcoded size stuff seems fragile
+	return '<iframe src="http://www.twitch.tv/'+name+'/embed" frameborder="0" scrolling="no" volume="0" height="280" width="400"></iframe>'
 }
 
 
-$( document ).ready( init )
+
+function getParam(name){
+   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
+}
+
+
+
+
+
+
+
+
