@@ -1,18 +1,21 @@
 function init() {
+    params = getUrlVars();
     createHtmlTable();
     loadStreams();
 }
 $( document ).ready( init )
 
+
+
 function createHtmlTable() {
     //make a table and put it on the page. 
     //put divs in the grid with numbers in their names, 
     //so we can stick twitch embeds and usernames in them
-    var width = getParam("w");
+    var width = params["w"];
     if(!width) {
         width = 2;
     }
-    var height = getParam("h");
+    var height = params["h"];
     if(!height) {
         height = 3;
     }
@@ -39,12 +42,15 @@ function createHtmlTable() {
 
 function loadStreams() {
     //get info about the race from srl
-    var race = getParam("race");
+    var racepar = params["race"];
+    raceid = racepar.replace('#srl-', '');
+
+    
     var apiUrl = "http://api.speedrunslive.com";
-    if(race) {
+    if(raceid) {
         $.ajax({
             type : "GET",
-            url : apiUrl + "/races/" + race,
+            url : apiUrl + "/races/" + raceid,
             processData : true,
             data : {},
             dataType : "jsonp",
@@ -57,8 +63,8 @@ function loadStreams() {
 
 function parseSrlJson(response) {
     //figure out which users in the race we should display
-    var me = getParam("me");
-    var blocked = getParam("blocked");
+    var me = params["me"];
+    var blocked = params["blocked"];
     var blockedUsers = [];
     if(blocked) {
         blockedUsers = blocked.split(',');
@@ -91,14 +97,20 @@ function formatStream( name ) {
     //put in a twitch embed to show the stream that has the given name
     //todo: this hardcoded size stuff seems fragile
 	return '<iframe src="http://www.twitch.tv/'+name+'/embed" frameborder="0" scrolling="no" volume="0" height="280" width="400"></iframe>'
+
 }
 
 
 
-function getParam(name){
-   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-      return decodeURIComponent(name[1]);
-}
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
 
 
 
