@@ -1,14 +1,12 @@
 srlRaceWatcher
 ==============
 
+### What it does
 A webpage to view streams from an SRL race in a compact format, suitable for restreaming your opponents while you're in a race. (the race viewing page built into SRL takes up too much space)
+Video(s) are automatically set to the maximum (equal) size within the available window space.
+### Get started
+Paste an SRL race ID (or IRC race channel), or browse available SRL races. The page will offer a chance to exclude yourself so you aren't watching your own stream.
 
-Set the url param "race" to the id of the SRL race
-
-Set the url param "me" to your twitch name to make it so it doesn't stream yourself if you're in the race
-
-Set the url param "blocked" to a comma-separated list of other twitch usernames that you don't want to be included (perhaps they asked you not to restream them)
-
-Set the url params "w" and "h" to control the size of the grid. It's 2x3 by default
-
-http://hyphen-ated.github.io/srlRaceWatcher/?me=foo&race=bar
+### Controls
+If there are other users' streams that you don't want to be included (perhaps they asked you not to restream them) you can click the (remove) button available when hovering over their stream.
+If you want to clear your hidden streamer list, there's a menu that expands from the left edge of the window.
