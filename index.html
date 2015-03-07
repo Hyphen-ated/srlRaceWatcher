@@ -1,13 +1,20 @@
-<html>
-<head>
+<html><head>
+
 <title>Gridded race viewer</title>
-<LINK href="style.css" rel="stylesheet" type="text/css">
-</head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<link type="text/css" href="style.css" rel="stylesheet">
+<script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript" src="viewer.js"></script>
 
-<body bgcolor="#000000" text="#bbbbbb" >
+</head><body>
 
-</body>
-</html>
+<div id="content"></div>
+<div id="menu">
+    <div id="menutab"></div>
+    <div id="menucontent">
+        Excluded stream list:<br>
+        <span id="excludedlist"></span><br>
+        <button id='clearexcluded'>clear excluded streams</button>
+    </div>
+</div>
 
+</body></html>
