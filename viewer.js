@@ -88,6 +88,7 @@ function insert_stream_boxes(race_object) {
             '<div class=container>'+
                 '<div class=streamername>'+srl_attr.twitch+'</div>'+
                 '<div class=stream>'+format_stream(srl_attr.twitch)+'</div>'+
+                '<div class=refresher></div>'+
                 '<div class=barhider></div>'+
                 '<div class=excluder></div>'+
             '</div>'
@@ -120,13 +121,13 @@ function build_race_list_object(data_returned) {
 
 // builds an html list of available races
 function build_race_list_html() {
-    var race_list_dom = $('<div class=question><h2>pick a race</h2><div id=race_list>Paste an <input id="srlraceid" placeholder="#srl-raceid"> or choose a race below: </div></div>');
+    var race_list_dom = $('<div class=question><h2>pick a race</h2><div id=race_list>Paste an <input class="race_id_input" placeholder="#srl-raceid"> or choose a race below: </div></div>');
     $.each(race_list_object,function(i,race_object){
         race_list_dom.children('div').append('<div class=race_list_entry raceid='+race_object.id+'><b>'+race_object.game.name+'</b> <u>played by</u> '+implode_object_keys(race_object.entrants).join(' <u>&</u> ')+'</div>');
     });
     $('#content').html(race_list_dom);
 
-    // now waits for a race to be clicked //////////////////////////////////¯¯\/
+    // now waits for a race to be clicked
     $('#race_list').on('click', '.race_list_entry', function(){
         // save chosen race id
         console.log('test');
@@ -136,15 +137,8 @@ function build_race_list_html() {
         if (excluded_users.length == 0) ask_which_player(race_id);
         else complete_and_build(race_id);
     });
-    // or for the input to be filled out   /////////////////////////////////__/\
-    $('#srlraceid').on('mouseup mouseout keyup paste change', function(){
-        if (!$(this).val().trim().match( /^#?srl-\w+$/i )) return;
-        // save chosen race id
-        var race_id = $(this).val().trim().match( /^#?srl-(\w+)$/i )[1];
-        // and follow up with racer list
-        if (excluded_users.length == 0) ask_which_player(race_id);
-        else complete_and_build(race_id);
-    });
+    
+    // alternately, the <input class="race_id_input"> is also listening already for a raceid to appear
 }
 
 // builds an html list of racers in selected race
@@ -235,6 +229,16 @@ $(document).ready( function(){
         $('#excludedlist').text('');
     });
 
+    // always listen for a new race id entry in race id fields
+    $('#content, #menu').on('mouseup mouseout keyup paste change', '.race_id_input', function(){
+        if (!$(this).val().trim().match( /^#?srl-\w+$/i )) return;
+        // save chosen race id
+        var race_id = $(this).val().trim().match( /^#?srl-(\w+)$/i )[1];
+        // and follow up with racer list
+        if (excluded_users.length == 0) ask_which_player(race_id);
+        else complete_and_build(race_id);
+    });
+
     // exclude users
     $('#content').on('click', '.excluder', function(){
         // identify whose stream to remove
@@ -247,6 +251,11 @@ $(document).ready( function(){
         $('#excludedlist').text(excluded_users.join(', '));
         // and dump this stream
         $(this).parent().remove();
+    });
+
+    // refresh clicked stream
+    $('#content').on('click', '.refresher', function(){
+        $(this).parent().html($(this).parent().html());
     });
 
     // populate excluded users list

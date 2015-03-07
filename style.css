@@ -4,6 +4,7 @@ html {
 body {
     background:#000;
     color:#bbb;
+      font-size: 16px;
 }
 #menu, #menutab {
     -webkit-transition-property: width;
@@ -159,4 +160,18 @@ b {
 .container:hover .excluder {
 	height: 20px;
   	padding: 2px;
+}
+
+.refresher{
+    position: absolute;
+    top: 53px;
+    left: 0;
+    right: 0;
+    bottom: 32px;
+    cursor: wait;
+}
+
+.startover {
+	font-size: 20px;
+  	color: #eee;
 }
