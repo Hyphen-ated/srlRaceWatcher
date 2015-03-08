@@ -6,6 +6,8 @@ A webpage to view streams from an SRL race in a compact format, suitable for res
 Video(s) are automatically set to the maximum (equal) size within the available window space.
 
 ### Get started
+http://hyphen-ated.github.io/srlRaceWatcher/
+
 Paste an SRL race ID (or IRC race channel), or browse available SRL races. The page will offer a chance to exclude yourself so you aren't watching your own stream.
 
 ### Controls
