@@ -236,7 +236,11 @@ $(document).ready( function(){
         var race_id = $(this).val().trim().match( /^#?srl-(\w+)$/i )[1];
         // and follow up with racer list
         if (excluded_users.length == 0) ask_which_player(race_id);
-        else complete_and_build(race_id);
+        else {
+            window.location = '#'+race_id;
+            //alert('newrace');
+            location.reload();
+        }
     });
 
     // exclude users
